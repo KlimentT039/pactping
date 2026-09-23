@@ -1,0 +1,44 @@
+import com.klt.pactping.domain.CommitmentStatus;
+
+CREATE TABLE CommitmentRow (
+  id TEXT NOT NULL PRIMARY KEY,
+  goal TEXT NOT NULL,
+  deadlineMillis INTEGER NOT NULL,
+  witnessId TEXT NOT NULL,
+  witnessName TEXT NOT NULL,
+  witnessPhone TEXT NOT NULL,
+  confession TEXT NOT NULL,
+  status TEXT AS CommitmentStatus NOT NULL,
+  resolvedAtMillis INTEGER
+);
+
+CREATE INDEX commitment_status ON CommitmentRow(status);
+CREATE INDEX commitment_deadline ON CommitmentRow(deadlineMillis);
+
+selectAll:
+SELECT * FROM CommitmentRow;
+
+selectActive:
+SELECT * FROM CommitmentRow WHERE status = 'Active' ORDER BY deadlineMillis ASC;
+
+selectById:
+SELECT * FROM CommitmentRow WHERE id = :id;
+
+selectCounts:
+SELECT
+  COALESCE(SUM(CASE WHEN status = 'Kept' THEN 1 ELSE 0 END), 0) AS kept,
+  COALESCE(SUM(CASE WHEN status = 'Missed' THEN 1 ELSE 0 END), 0) AS broken
+FROM CommitmentRow;
+
+insert:
+INSERT INTO CommitmentRow (
+  id, goal, deadlineMillis,
+  witnessId, witnessName, witnessPhone,
+  confession, status, resolvedAtMillis
+)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+updateStatus:
+UPDATE CommitmentRow
+SET status = :status, resolvedAtMillis = :resolvedAtMillis
+WHERE id = :id;

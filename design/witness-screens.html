@@ -1,0 +1,1326 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1200" />
+<title>Witness — Screen Set</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Light tokens */
+    --ink: #0B0B0F;
+    --ink-2: #2B2B33;
+    --muted: #7A7A82;
+    --hairline: rgba(11,11,15,0.08);
+    --hairline-strong: rgba(11,11,15,0.14);
+    --bg: #EFE9DE;          /* warm off-white page */
+    --surface: #F7F2E8;     /* card cream */
+    --surface-2: #FFFFFF;
+    --accent: #FF4D1F;      /* primary action — sunset orange */
+    --accent-ink: #FFFFFF;
+    --success: #1E8C4A;
+    --success-soft: #D9F1E2;
+    --miss: #D11A2A;
+    --miss-soft: #FBE0E1;
+    --chip-bg: rgba(11,11,15,0.06);
+  }
+  .dark {
+    --ink: #F5F1EA;
+    --ink-2: #C8C6C0;
+    --muted: #7B7B82;
+    --hairline: rgba(245,241,234,0.08);
+    --hairline-strong: rgba(245,241,234,0.16);
+    --bg: #0B0B0F;
+    --surface: #15151B;
+    --surface-2: #1D1D24;
+    --accent: #FF6B3D;
+    --accent-ink: #0B0B0F;
+    --success: #25C26A;
+    --success-soft: rgba(37,194,106,0.14);
+    --miss: #F2515E;
+    --miss-soft: rgba(242,81,94,0.14);
+    --chip-bg: rgba(245,241,234,0.08);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    background: #1C1C22;
+    color: #F5F1EA;
+    padding: 48px 32px 96px;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  .page-head {
+    max-width: 1180px;
+    margin: 0 auto 56px;
+  }
+  .page-head h1 {
+    font-size: 44px; font-weight: 900; letter-spacing: -0.02em; margin: 0 0 8px;
+  }
+  .page-head p { color: #9A9AA2; margin: 0; max-width: 720px; line-height: 1.5; }
+
+  /* Design system reference */
+  .ds {
+    max-width: 1180px; margin: 0 auto 64px;
+    display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 24px;
+  }
+  .ds-card {
+    background: #15151B; border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 20px; padding: 24px; color: #E8E6E1;
+  }
+  .ds-card h3 { margin: 0 0 16px; font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase; color: #9A9AA2; font-weight: 700; }
+  .swatches { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+  .sw { aspect-ratio: 1; border-radius: 12px; display: flex; align-items: flex-end; padding: 8px; font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.85); }
+  .sw.lt { color: rgba(0,0,0,0.7); }
+  .type-sample { font-weight: 900; letter-spacing: -0.04em; line-height: 0.9; font-family: 'Inter', sans-serif; font-variant-numeric: tabular-nums; }
+  .type-sample.xl { font-size: 64px; }
+  .type-sample.h { font-size: 28px; letter-spacing: -0.02em; }
+  .type-row { display: flex; align-items: baseline; gap: 12px; margin-bottom: 10px; }
+  .type-label { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: #9A9AA2; font-weight: 700; }
+  .comp { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .btn-demo { background: var(--accent, #FF4D1F); color: white; border: 0; padding: 12px 18px; border-radius: 14px; font-weight: 700; font-family: inherit; font-size: 14px; }
+  .pill-demo { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+
+  /* Grid of phones */
+  .grid {
+    max-width: 1180px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 56px 40px;
+  }
+  .section-label {
+    grid-column: 1 / -1;
+    font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: #6E6E76; font-weight: 700;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding-top: 28px; margin-top: 8px;
+  }
+  .item { display: flex; flex-direction: column; align-items: center; }
+  .caption {
+    margin-top: 14px; font-size: 12px; color: #9A9AA2;
+    font-weight: 500; letter-spacing: 0.04em; text-align: center;
+  }
+  .caption b { color: #F5F1EA; font-weight: 700; }
+
+  /* Phone frame */
+  .phone {
+    width: 340px; height: 720px;
+    border-radius: 44px;
+    background: var(--bg);
+    color: var(--ink);
+    position: relative; overflow: hidden;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.04) inset,
+      0 0 0 8px #0a0a0c,
+      0 0 0 9px rgba(255,255,255,0.06),
+      0 40px 80px rgba(0,0,0,0.45);
+    font-family: 'Inter', sans-serif;
+  }
+  .screen { position: absolute; inset: 0; display: flex; flex-direction: column; }
+
+  /* Status bar */
+  .statusbar {
+    height: 44px; padding: 0 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 13px; font-weight: 700; color: var(--ink);
+    flex-shrink: 0;
+  }
+  .statusbar .icons { display: flex; gap: 6px; align-items: center; }
+  .sb-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--ink); }
+  .sb-wifi, .sb-bat { width: 14px; height: 10px; border: 1.5px solid var(--ink); border-radius: 2px; position: relative; }
+  .sb-bat::after { content: ''; position: absolute; right: -3px; top: 2px; width: 2px; height: 4px; background: var(--ink); border-radius: 1px; }
+  .sb-bat::before { content: ''; position: absolute; inset: 1px; background: var(--ink); border-radius: 1px; }
+
+  /* Home indicator */
+  .home-ind { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 110px; height: 4px; background: var(--ink); border-radius: 2px; opacity: 0.85; }
+
+  /* Common */
+  .content { flex: 1; overflow: hidden; padding: 0 22px 28px; display: flex; flex-direction: column; gap: 18px; }
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-top: 4px;
+  }
+  .wordmark {
+    font-weight: 900; font-size: 16px; letter-spacing: 0.32em; color: var(--ink);
+  }
+  .wordmark .dot { color: var(--accent); }
+  .icon-btn {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--chip-bg); color: var(--ink); font-size: 16px;
+    cursor: pointer; border: 0;
+  }
+  .back { font-weight: 700; font-size: 16px; }
+
+  .h-label { font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 800; color: var(--muted); }
+  .h-display { font-size: 30px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.08; color: var(--ink); }
+  .h-display.big { font-size: 36px; }
+  .body { font-size: 14px; color: var(--ink-2); line-height: 1.45; }
+  .small { font-size: 12px; color: var(--muted); }
+
+  .card {
+    background: var(--surface); border-radius: 22px; padding: 18px;
+    border: 1px solid var(--hairline);
+  }
+  .card.flat { background: var(--surface-2); }
+  .card.commit { padding: 20px; }
+
+  /* Status pill */
+  .pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 9px; border-radius: 999px; font-size: 10px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; }
+  .pill.on   { background: var(--chip-bg); color: var(--ink); }
+  .pill.due  { background: #FFE9D9; color: #B43E0F; }
+  .dark .pill.due { background: rgba(255,107,61,0.18); color: #FFB089; }
+  .pill.kept { background: var(--success-soft); color: var(--success); }
+  .pill.miss { background: var(--miss-soft); color: var(--miss); }
+  .pill.warn { background: #FFE0E2; color: #B0151F; }
+  .dark .pill.warn { background: rgba(242,81,94,0.18); color: #FFA9B0; }
+
+  /* Buttons */
+  .cta {
+    width: 100%; padding: 16px 18px; border: 0; border-radius: 18px;
+    font-family: inherit; font-weight: 800; font-size: 15px;
+    letter-spacing: 0.01em; cursor: pointer;
+    background: var(--ink); color: var(--bg);
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .cta.accent { background: var(--accent); color: var(--accent-ink); }
+  .cta.success { background: var(--success); color: white; }
+  .cta.miss { background: var(--miss); color: white; }
+  .cta.ghost { background: transparent; color: var(--ink); border: 1.5px solid var(--hairline-strong); }
+  .cta.lg { padding: 20px; font-size: 16px; border-radius: 20px; }
+  .cta.xl { padding: 24px; font-size: 17px; border-radius: 22px; }
+  .link { background: none; border: 0; color: var(--muted); font-family: inherit; font-size: 13px; font-weight: 600; padding: 12px; text-align: center; cursor: pointer; }
+
+  /* Countdown hero numerals */
+  .cd {
+    font-weight: 900; letter-spacing: -0.04em; line-height: 0.86;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+  }
+  .cd .unit { font-weight: 700; font-size: 0.35em; letter-spacing: 0.04em; color: var(--muted); margin-right: 4px; }
+  .cd-sep { color: var(--muted); }
+
+  /* Avatar */
+  .av { width: 36px; height: 36px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; color: white; flex-shrink: 0; }
+  .av.lg { width: 48px; height: 48px; font-size: 16px; }
+  .av-sm { width: 28px; height: 28px; font-size: 11px; }
+  .av-row { display: flex; align-items: center; gap: 10px; }
+  .av-row .meta { display: flex; flex-direction: column; line-height: 1.2; }
+  .av-row .name { font-size: 14px; font-weight: 700; color: var(--ink); }
+  .av-row .sub { font-size: 12px; color: var(--muted); }
+
+  /* Step indicator */
+  .steps { display: flex; gap: 6px; align-items: center; }
+  .step { height: 4px; width: 22px; border-radius: 2px; background: var(--hairline-strong); }
+  .step.active { background: var(--ink); width: 36px; }
+
+  /* Inputs */
+  .field { display: flex; flex-direction: column; gap: 8px; }
+  .input {
+    border: 0; background: transparent; padding: 0;
+    font-family: inherit; font-weight: 800; font-size: 26px;
+    color: var(--ink); letter-spacing: -0.02em;
+    border-bottom: 2px solid var(--ink); padding-bottom: 14px;
+    outline: none;
+  }
+  .input.area {
+    background: var(--surface); border-radius: 18px; padding: 18px;
+    border: 1px solid var(--hairline);
+    font-weight: 500; font-size: 15px; letter-spacing: 0; line-height: 1.5;
+    min-height: 150px; color: var(--ink);
+  }
+  .helper { font-size: 13px; color: var(--muted); line-height: 1.4; }
+  .helper b { color: var(--ink); font-weight: 700; }
+
+  /* Calendar */
+  .cal { background: var(--surface); border-radius: 22px; padding: 16px; border: 1px solid var(--hairline); }
+  .cal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-weight: 800; font-size: 14px; }
+  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; }
+  .cal-grid .dow { font-size: 10px; color: var(--muted); font-weight: 700; letter-spacing: 0.08em; padding: 6px 0; }
+  .cal-grid .day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; border-radius: 50%; color: var(--ink); }
+  .cal-grid .day.off { color: var(--muted); opacity: 0.4; }
+  .cal-grid .day.sel { background: var(--ink); color: var(--bg); }
+  .cal-grid .day.today { color: var(--accent); }
+
+  /* Contact list */
+  .contact { display: flex; align-items: center; gap: 12px; padding: 10px 0; }
+  .contact .name { font-size: 15px; font-weight: 600; color: var(--ink); }
+  .contact .num { font-size: 12px; color: var(--muted); }
+  .contact .check { margin-left: auto; width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--hairline-strong); display: flex; align-items: center; justify-content: center; }
+  .contact.sel .check { background: var(--ink); border-color: var(--ink); color: var(--bg); font-size: 12px; }
+  .section-h { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); font-weight: 800; margin-top: 8px; }
+
+  .search {
+    background: var(--chip-bg); border-radius: 14px; padding: 12px 14px;
+    display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--muted);
+  }
+
+  /* Chat bubble */
+  .bubble {
+    background: var(--ink); color: var(--bg);
+    border-radius: 22px 22px 22px 6px;
+    padding: 16px 18px; font-size: 14px; line-height: 1.45;
+    font-weight: 500;
+  }
+  .bubble.out { border-radius: 22px 22px 6px 22px; background: var(--accent); color: var(--accent-ink); }
+  .bubble.miss { background: var(--miss); color: white; border-radius: 22px 22px 6px 22px; }
+  .bubble.heads {
+    background: var(--surface); color: var(--ink); border: 1px solid var(--hairline);
+    border-radius: 22px;
+  }
+  .bubble-meta { font-size: 11px; color: var(--muted); font-weight: 600; margin-top: 8px; }
+
+  /* Header record bar */
+  .record {
+    background: var(--surface); border-radius: 22px; padding: 16px 18px;
+    border: 1px solid var(--hairline);
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .record-row { display: flex; justify-content: space-between; align-items: baseline; }
+  .record-num { font-size: 26px; font-weight: 900; letter-spacing: -0.02em; line-height: 1; font-variant-numeric: tabular-nums; }
+  .record-num.kept { color: var(--success); }
+  .record-num.miss { color: var(--miss); }
+  .bar { height: 6px; border-radius: 4px; background: var(--miss); overflow: hidden; position: relative; }
+  .bar > span { display: block; height: 100%; background: var(--success); border-radius: 4px; }
+
+  /* Commitment card */
+  .commit-card {
+    background: var(--surface); border-radius: 24px; padding: 18px 20px;
+    border: 1px solid var(--hairline);
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .commit-head { display: flex; justify-content: space-between; align-items: flex-start; }
+  .commit-goal { font-size: 18px; font-weight: 800; letter-spacing: -0.01em; color: var(--ink); line-height: 1.25; }
+  .commit-cd { font-size: 44px; font-weight: 900; letter-spacing: -0.04em; line-height: 0.9; color: var(--ink); font-variant-numeric: tabular-nums; }It'
+  .commit-cd.urgent { color: var(--miss); }
+  .commit-foot { display: flex; align-items: center; gap: 10px; justify-content: space-between; }
+
+  /* FAB */
+  .fab {
+    position: absolute; bottom: 22px; left: 22px; right: 22px;
+    background: var(--accent); color: var(--accent-ink);
+    padding: 16px; border-radius: 20px; text-align: center;
+    font-weight: 800; font-size: 15px; letter-spacing: 0.01em;
+    box-shadow: 0 12px 28px rgba(255,77,31,0.35);
+  }
+  .dark .fab { box-shadow: 0 12px 28px rgba(255,107,61,0.3); }
+
+  /* Empty state */
+  .empty-eye {
+    width: 120px; height: 120px; border-radius: 50%;
+    background: var(--surface); display: flex; align-items: center; justify-content: center;
+    font-size: 64px; font-weight: 900; color: var(--ink);
+    border: 1px solid var(--hairline); position: relative;
+  }
+
+  /* Time chip selection */
+  .time-chip {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 18px; background: var(--ink); color: var(--bg);
+    border-radius: 16px; font-weight: 800; font-size: 18px; letter-spacing: -0.01em;
+  }
+  .chip-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .chip { padding: 10px; background: var(--chip-bg); border-radius: 12px; text-align: center; font-size: 13px; font-weight: 700; color: var(--ink); }
+
+  /* Summary list */
+  .sumrow { display: flex; flex-direction: column; gap: 4px; padding: 14px 0; border-bottom: 1px solid var(--hairline); }
+  .sumrow:last-child { border-bottom: 0; }
+  .sumrow .lab { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 800; color: var(--muted); }
+  .sumrow .val { font-size: 16px; font-weight: 700; color: var(--ink); }
+
+  /* Detail hero */
+  .hero-cd {
+    font-weight: 900; letter-spacing: -0.045em; line-height: 0.84;
+    font-variant-numeric: tabular-nums; color: var(--ink);
+  }
+  .hero-cd .row1 { font-size: 96px; }
+  .hero-cd .row2 { font-size: 56px; color: var(--muted); margin-top: 4px; }
+
+  /* Confession layout */
+  .confess-hero { display: flex; flex-direction: column; gap: 6px; }
+  .confess-hero .miss-tag { font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; font-weight: 900; color: var(--miss); }
+  .confess-hero .miss-title { font-size: 38px; font-weight: 900; letter-spacing: -0.03em; line-height: 0.95; color: var(--ink); }
+  .confess-hero .miss-sub { font-size: 14px; color: var(--muted); margin-top: 8px; }
+
+  /* Success hero */
+  .win-burst {
+    width: 96px; height: 96px; border-radius: 50%;
+    background: var(--success); color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 52px; font-weight: 900;
+    box-shadow: 0 0 0 12px var(--success-soft);
+  }
+  .win-title { font-size: 38px; font-weight: 900; letter-spacing: -0.03em; line-height: 0.98; color: var(--ink); }
+  .win-tag { font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; font-weight: 900; color: var(--success); }
+
+  /* Record chart */
+  .bars { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; height: 110px; align-items: end; }
+  .bcol { display: flex; flex-direction: column; gap: 2px; height: 100%; justify-content: end; align-items: stretch; }
+  .bcol .b { border-radius: 4px; }
+  .bcol .b.k { background: var(--success); }
+  .bcol .b.m { background: var(--miss); }
+  .week-lab { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; margin-top: 6px; }
+  .week-lab span { text-align: center; font-size: 10px; color: var(--muted); font-weight: 700; }
+
+  .seg { display: inline-flex; padding: 4px; background: var(--chip-bg); border-radius: 14px; }
+  .seg span { padding: 8px 14px; font-size: 12px; font-weight: 700; color: var(--muted); border-radius: 10px; }
+  .seg span.on { background: var(--ink); color: var(--bg); }
+
+  .hist-row { display: flex; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--hairline); }
+  .hist-row:last-child { border-bottom: 0; }
+  .hist-row .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .hist-row .dot.k { background: var(--success); }
+  .hist-row .dot.m { background: var(--miss); }
+  .hist-row .t { flex: 1; font-size: 14px; font-weight: 700; color: var(--ink); }
+  .hist-row .d { font-size: 12px; color: var(--muted); font-weight: 600; }
+
+  /* Photo proof preview */
+  .proof {
+    background: var(--surface); border-radius: 18px; padding: 14px; border: 1px dashed var(--hairline-strong);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .proof .ico { width: 40px; height: 40px; border-radius: 12px; background: var(--chip-bg); display: flex; align-items: center; justify-content: center; font-size: 18px; }
+
+  /* Scroll fade */
+  .fade-bottom::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 80px;
+    background: linear-gradient(to top, var(--bg), transparent);
+    pointer-events: none;
+  }
+
+  /* Misc helpers */
+  .row { display: flex; align-items: center; }
+  .row.sb { justify-content: space-between; }
+  .row.g { gap: 10px; }
+  .col { display: flex; flex-direction: column; gap: 8px; }
+  .col.g14 { gap: 14px; }
+  .col.g18 { gap: 18px; }
+  .col.g24 { gap: 24px; }
+  .grow { flex: 1; }
+  .center { text-align: center; }
+  .strike { text-decoration: line-through; opacity: 0.5; }
+
+  /* Footer */
+  footer { text-align: center; color: #6E6E76; font-size: 12px; margin-top: 80px; }
+</style>
+</head>
+<body>
+
+<header class="page-head">
+  <h1>Witness — Screen Set</h1>
+  <p>One cohesive design system across Android (Jetpack Compose) and iOS (SwiftUI). Light + dark variants. Oversized countdown numerals as the hero. Accent reserved for primary action. Green only for kept, red only for the miss.</p>
+</header>
+
+<!-- DESIGN SYSTEM -->
+<section class="ds">
+  <div class="ds-card">
+    <h3>Palette</h3>
+    <div class="swatches">
+      <div class="sw" style="background:#0B0B0F">Ink</div>
+      <div class="sw lt" style="background:#EFE9DE">Cream</div>
+      <div class="sw" style="background:#FF4D1F">Strike</div>
+      <div class="sw" style="background:#1E8C4A">Kept</div>
+      <div class="sw" style="background:#D11A2A">Miss</div>
+    </div>
+    <p style="margin-top:14px; font-size:12px; color:#9A9AA2; line-height:1.5;">
+      Ink and Cream form the neutral spine. <b style="color:#FF8E6A;">Strike</b> drives every primary CTA. <b style="color:#5BD894;">Kept</b> appears only on wins. <b style="color:#FF6B7A;">Miss</b> is reserved for the confession moment.
+    </p>
+  </div>
+  <div class="ds-card">
+    <h3>Typography</h3>
+    <div class="type-row"><span class="type-label">Hero</span></div>
+    <div class="type-sample xl">02:14</div>
+    <div class="type-row" style="margin-top:14px;"><span class="type-label">Display</span></div>
+    <div class="type-sample h">Make a promise.</div>
+    <p style="margin-top:14px; font-size:12px; color:#9A9AA2; line-height:1.5;">Inter, tabular nums, tight tracking. Countdown is the visual anchor across every screen.</p>
+  </div>
+  <div class="ds-card">
+    <h3>Components</h3>
+    <div class="comp" style="margin-bottom:14px;">
+      <button class="btn-demo">Lock it in</button>
+      <button class="btn-demo" style="background:#0B0B0F">Mark done</button>
+    </div>
+    <div class="comp">
+      <span class="pill-demo" style="background:rgba(255,255,255,0.08);color:#E8E6E1">On the line</span>
+      <span class="pill-demo" style="background:rgba(37,194,106,0.18);color:#5BD894">Kept</span>
+      <span class="pill-demo" style="background:rgba(242,81,94,0.18);color:#FF8A95">Missed</span>
+      <span class="pill-demo" style="background:rgba(255,107,61,0.18);color:#FFB089">Due soon</span>
+    </div>
+  </div>
+</section>
+
+<div class="grid">
+
+  <!-- ===================== HOME ===================== -->
+  <div class="section-label">01 — Home</div>
+
+  <!-- HOME LIGHT -->
+  <div class="item">
+    <div class="phone">
+      <div class="screen">
+        <div class="statusbar"><span>9:41</span><div class="icons"><div class="sb-wifi"></div><div class="sb-bat"></div></div></div>
+        <div class="content">
+          <div class="topbar">
+            <div class="wordmark">WITNESS<span class="dot">.</span></div>
+            <button class="icon-btn">⚙</button>
+          </div>
+
+          <div class="record">
+            <div class="record-row">
+              <div>
+                <div class="h-label" style="font-size:10px;">Kept</div>
+                <div class="record-num kept">13</div>
+              </div>
+              <div style="text-align:right;">
+                <div class="h-label" style="font-size:10px;">Broken</div>
+                <div class="record-num miss">3</div>
+              </div>
+            </div>
+            <div class="bar"><span style="width:81%"></span></div>
+            <div class="small">81% of promises kept</div>
+          </div>
+
+          <div class="row sb" style="margin-top:2px;">
+            <div class="h-label">Active · 3</div>
+            <div class="small" style="font-weight:700;">Soonest first</div>
+          </div>
+
+          <div class="col g14" style="overflow:hidden;">
+            <div class="commit-card">
+              <div class="commit-head">
+                <div class="commit-goal">Finish marketing deck</div>
+                <span class="pill on">On the line</span>
+              </div>
+              <div class="commit-cd">2<span style="font-size:24px;color:var(--muted);font-weight:700;">d</span> 14<span style="font-size:24px;color:var(--muted);font-weight:700;">h</span></div>
+              <div class="commit-foot">
+                <div class="av-row">
+                  <div class="av" style="background:#3F6CFF;width:28px;height:28px;font-size:11px;">MC</div>
+                  <div class="sub" style="font-size:12px;color:var(--muted);font-weight:600;">Mike Chen watching</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="commit-card">
+              <div class="commit-head">
+                <div class="commit-goal">Pay back Alex<br>($180)</div>
+                <span class="pill due">Due soon</span>
+              </div>
+              <div class="commit-cd urgent">47<span style="font-size:24px;color:var(--miss);opacity:0.7;font-weight:700;">m</span></div>
+              <div class="commit-foot">
+                <div class="av-row">
+                  <div class="av" style="background:#E0457B;width:28px;height:28px;font-size:11px;">AR</div>
+                  <div class="sub" style="font-size:12px;color:var(--muted);font-weight:600;">Alex Rivera watching</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="fab">＋  Make a promise</div>
+        <div class="home-ind"></div>
+      </div>
+    </div>
+    <div class="caption"><b>Home</b> · Light · Active commitments</div>
+  </div>
+
+  <!-- HOME DARK -->
+  <div class="item">
+    <div class="phone dark">
+      <div class="screen">
+        <div class="statusbar"><span>9:41</span><div class="icons"><div class="sb-wifi"></div><div class="sb-bat"></div></div></div>
+        <div class="content">
+          <div class="topbar">
+            <div class="wordmark">WITNESS<span class="dot">.</span></div>
+            <button class="icon-btn">⚙</button>
+          </div>
+
+          <div class="record">
+            <div class="record-row">
+              <div>
+                <div class="h-label" style="font-size:10px;">Kept</div>
+                <div class="record-num kept">13</div>
+              </div>
+              <div style="text-align:right;">
+                <div class="h-label" style="font-size:10px;">Broken</div>
+                <div class="record-num miss">3</div>
+              </div>
+            </div>
+            <div class="bar"><span style="width:81%"></span></div>
+            <div class="small">81% of promises kept</div>
+          </div>
+
+          <div class="row sb" style="margin-top:2px;">
+            <div class="h-label">Active · 3</div>
+            <div class="small" style="font-weight:700;">Soonest first</div>
+          </div>
+
+          <div class="col g14" style="overflow:hidden;">
+            <div class="commit-card">
+              <div class="commit-head">
+                <div class="commit-goal">Finish marketing deck</div>
+                <span class="pill on">On the line</span>
+              </div>
+              <div class="commit-cd">2<span style="font-size:24px;color:var(--muted);font-weight:700;">d</span> 14<span style="font-size:24px;color:var(--muted);font-weight:700;">h</span></div>
+              <div class="commit-foot">
+                <div class="av-row">
+                  <div class="av" style="background:#3F6CFF;width:28px;height:28px;font-size:11px;">MC</div>
+                  <div class="sub" style="font-size:12px;color:var(--muted);font-weight:600;">Mike Chen watching</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="commit-card">
+              <div class="commit-head">
+                <div class="commit-goal">Pay back Alex<br>($180)</div>
+                <span class="pill due">Due soon</span>
+              </div>
+              <div class="commit-cd urgent">47<span style="font-size:24px;color:var(--miss);opacity:0.7;font-weight:700;">m</span></div>
+              <div class="commit-foot">
+                <div class="av-row">
+                  <div class="av" style="background:#E0457B;width:28px;height:28px;font-size:11px;">AR</div>
+                  <div class="sub" style="font-size:12px;color:var(--muted);font-weight:600;">Alex Rivera watching</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="fab">＋  Make a promise</div>
+        <div class="home-ind"></div>
+      </div>
+    </div>
+    <div class="caption"><b>Home</b> · Dark · Active commitments</div>
+  </div>
+
+  <!-- HOME EMPTY -->
+  <div class="item">
+    <div class="phone">
+      <div class="screen">
+        <div class="statusbar"><span>9:41</span><div class="icons"><div class="sb-wifi"></div><div class="sb-bat"></div></div></div>
+        <div class="content">
+          <div class="topbar">
+            <div class="wordmark">WITNESS<span class="dot">.</span></div>
+            <button class="icon-btn">⚙</button>
+          </div>
+
+          <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:28px; text-align:center; padding:0 12px;">
+            <div class="empty-eye">
+              <svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            </div>
+            <div class="col" style="gap:10px;">
+              <div class="h-display big" style="font-size:32px;">Nothing<br>on the line.</div>
+              <div class="body" style="max-width:240px;">Pick something you keep dodging. Name someone who'd notice. We'll handle the rest.</div>
+            </div>
+          </div>
+
+          <button class="cta accent xl">Make your first promise</button>
+        </div>
+        <div class="home-ind"></div>
+      </div>
+    </div>
+    <div class="caption"><b>Home</b> · Empty state · First-time use</div>
+  </div>
+
+  <!-- ===================== CREATE FLOW ===================== -->
+  <div class="section-label">02 — Create flow</div>
+
+  <!-- STEP 1 GOAL -->
+  <div class="item">
+    <div class="phone">
+      <div class="screen">
+        <div class="statusbar"><span>9:41</span><div class="icons"><div class="sb-wifi"></div><div class="sb-bat"></div></div></div>
+        <div class="content">
+          <div class="topbar">
+            <button class="icon-btn">←</button>
+            <div class="steps"><div class="step active"></div><div class="step"></div><div class="step"></div><div class="step"></div><div class="step"></div></div>
+            <button class="icon-btn" style="visibility:hidden;">×</button>
+          </div>
+
+          <div class="col" style="margin-top:18px;">
+            <div class="h-label">Step 1 of 5</div>
+            <div class="h-display big" style="font-size:34px;">What's the<br>promise?</div>
+          </div>
+
+          <div class="field" style="margin-top:14px;">
+            <input class="input" value="Finish marketing deck" />
+            <div class="helper">Be specific. <b>Future you isn't allowed to weasel.</b> "Get fit" doesn't count.</div>
+          </div>
+
+          <div class="grow"></div>
+          <button class="cta accent lg">Next  →</button>
+        </div>
+        <div class="home-ind"></div>
+      </div>
+    </div>
+    <div class="caption"><b>Create</b> · Step 1 · Goal</div>
+  </div>
+
+  <!-- STEP 2 DEADLINE -->
+  <div class="item">
+    <div class="phone">
+      <div class="screen">
+        <div class="statusbar"><span>9:41</span><div class="icons"><div class="sb-wifi"></div><div class="sb-bat"></div></div></div>
+        <div class="content">
+          <div class="topbar">
+            <button class="icon-btn">←</button>
+            <div class="steps"><div class="step"></div><div class="step active"></div><div class="step"></div><div class="step"></div><div class="step"></div></div>
+            <button class="icon-btn" style="visibility:hidden;">×</button>
+          </div>
+
+          <div class="col">
+            <div class="h-label">Step 2 of 5</div>
+            <div class="h-display" style="font-size:30px;">When's the line in the sand?</div>
+          </div>
+
+          <div class="cal">
+            <div class="cal-head"><span>March 2026</span><span style="color:var(--muted);">‹  ›</span></div>
+            <div class="cal-grid">
+              <div class="dow">S</div><div class="dow">M</div><div class="dow">T</div><div class="dow">W</div><div class="dow">T</div><div class="dow">F</div><div class="dow">S</div>
+              <div class="day off">22</div><div class="day off">23</div><div class="day off">24</div><div class="day off">25</div><div class="day off">26</div><div class="day off">27</div><div class="day off">28</div>
+              <div class="day">1</div><div class="day">2</div><div class="day">3</div><div class="day">4</div><div class="day today">5</div><div class="day sel">6</div><div class="day">7</div>
+              <div class="day">8</div><div class="day">9</div><div class="day">10</div><div class="day">11</div><div class="day">12</div><div class="day">13</div><div class="day">14</div>
+            </div>
+          </div>
+
+          <div class="row sb">
+            <div class="time-chip">8:00 PM</div>
+            <div class="small" style="font-weight:700;">in 2d 14h</div>
+          </div>
+
+          <div class="helper">Once set, <b>it's locked.</b> No extensions, no take-backs.</div>
+
+          <div class="grow"></div>
+          <button class="cta accent lg">Next  →</button>
+        </div>
+        <div class="home-ind"></div>
+      </div>
+    </div>
+    <div class="caption"><b>Create</b> · Step 2 · Deadline</div>
+  </div>
+
+  <!-- STEP 3 WITNESS -->
+  <div class="item">
+    <div class="phone">
+      <div class="screen">
+        <div class="statusbar"><span>9:41</span><div class="icons"><div class="sb-wifi"></div><div class="sb-bat"></div></div></div>
+        <div class="content">
+          <div class="topbar">
+            <button class="icon-btn">←</button>
+            <div class="steps"><div class="step"></div><div class="step"></div><div class="step active"></div><div class="step"></div><div class="step"></div></div>
+            <button class="icon-btn" style="visibility:hidden;">×</button>
+          </div>
+
+          <div class="col">
+            <div class="h-label">Step 3 of 5</div>
+            <div class="h-display big" style="font-size:32px;">Who's watching?</div>
+          </div>
+
+          <div class="search">🔍  <span>Search contacts</span></div>
+
+          <div style="overflow:hidden;">
+            <div class="section-h">Recent</div>
+            <div class="contact sel">
+              <div class="av" style="background:#3F6CFF;">MC</div>
+              <div><div class="name">Mike Chen</div><div class="num">+1 (415) 555-0142</div></div>
+              <div class="check">✓</div>
+            </div>
+            <div class="contact">
+              <div class="av" style="background:#22A06B;">SP</div>
+              <div><div class="name">Sarah Park</div><div class="num">+1 (415) 555-0188</div></div>
+              <div class="check"></div>
+            </div>
+
+            <div class="section-h">A</div>
+            <div class="contact">
+              <div class="av" style="background:#E0457B;">AR</div>
+              <div><div class="name">Alex Rivera</div><div class="num">+1 (628) 555-0193</div></div>
+              <div class="check"></div>
+            </div>
+          </div>
+
+          <div class="grow"></div>
+          <button class="cta accent lg">Next  →</button>
+        </div>
+        <div class="home-ind"></div>
+      </div>
+    </div>
+    <div class="caption"><b>Create</b> · Step 3 · Witness</div>
+  </div>
+
+  <!-- STEP 4 CONFESSION -->
+  <div class="item">
+    <div class="phone">
+      <div class="screen">
+        <div class="statusbar"><span>9:41</span><div class="icons"><div class="sb-wifi"></div><div class="sb-bat"></div></div></div>
+        <div class="content">
+          <div class="topbar">
+            <button class="icon-btn">←</button>
+            <div class="steps"><div class="step"></div><div class="step"></div><div class="step"></div><div class="step active"></div><div class="step"></div></div>
+            <button class="icon-btn" style="visibility:hidden;">×</button>
+          </div>
+
+          <div class="col">
+            <div class="h-label">Step 4 of 5</div>
+            <div class="h-display big" style="font-size:30px;">The confession.</div>
+            <div class="body" style="margin-top:4px;">If you miss, this goes to <b style="color:var(--ink);">Mike</b>, verbatim. Make it honest.</div>
+          </div>
+
+          <div class="input area">Hey Mike — I told you I'd finish the marketing deck by Friday 8pm. I didn't. No good excuse. Sorry for the noise.</div>
+
+          <div class="row sb">
+            <div class="small">Drafted by you · editable until deadline</div>
+            <div class="small" style="font-weight:800;color:var(--ink);">158<span style="color:var(--muted);font-weight:600;"> / 280</span></div>
+          </div>
+
+          <div class="grow"></div>
+          <button class="cta accent lg">Next  →</button>
+        </div>
+        <div class="home-ind"></div>
+      </div>
+    </div>
+    <div class="caption"><b>Create</b> · Step 4 · Confession</div>
+  </div>
+
+  <!-- STEP 5 SUMMARY -->
+  <div class="item">
+    <div class="phone">
+      <div class="screen">
+        <div class="statusbar"><span>9:41</span><div class="icons"><div class="sb-wifi"></div><div class="sb-bat"></div></div></div>
+        <div class="content">
+          <div class="topbar">
+            <button class="icon-btn">←</button>
+            <div class="steps"><div class="step"></div><div class="step"></div><div class="step"></div><div class="step"></div><div class="step active"></div></div>
+            <button class="icon-btn" style="visibility:hidden;">×</button>
+          </div>
+
+          <div class="col">
+            <div class="h-label">Step 5 of 5</div>
+            <div class="h-display big" style="font-size:34px;">Here's the deal.</div>
+          </div>
+
+          <div class="card commit" style="padding:8px 18px;">
+            <div class="sumrow">
+              <div class="lab">Goal</div>
+              <div class="val">Finish marketing deck</div>
+            </div>
+            <div class="sumrow">
+              <div class="lab">Due</div>
+              <div class="val">Fri Mar 6 · 8:00 PM <span style="color:var(--muted);font-weight:600;font-size:13px;">· in 2d 14h</span></div>
+            </div>
+            <div class="sumrow">
+              <div class="lab">Witness</div>
+              <div class="val row g" style="display:flex;align-items:center;">
+                <div class="av av-sm" style="background:#3F6CFF;">MC</div>
+                Mike Chen
+              </div>
+            </div>
+          </div>
+
+          <div class="col" style="gap:8px;">
+            <div class="lab" style="font-size:10px;letter-spacing:0.2em;text-transform:uppercase;font-weight:800;color:var(--muted);">If you miss, Mike gets</div>
+            <div class="bubble" style="font-size:13px;padding:14px 16px;">Hey Mike — I told you I'd finish the marketing deck by Friday 8pm. I didn't. No good excuse.</div>
+          </div>
+
+          <div class="grow"></div>
+          <button class="cta accent lg">Lock it in</button>
+          <button class="link">Go back and edit</button>
+        </div>
+        <div class="home-ind"></div>
+      </div>
+    </div>
+    <div class="caption"><b>Create</b> · Step 5 · Confirmation</div>
+  </div>
+
+  <!-- ===================== WITNESS PICKER ===================== -->
+  <div class="section-label">03 — Witness picker (standalone)</div>
+
+  <div class="item">
+    <div class="phone">
+      <div class="screen">
+        <div class="statusbar"><span>9:41</span><div class="icons"><div class="sb-wifi"></div><div class="sb-bat"></div></div></div>
+        <div class="content">
+          <div class="topbar">
+            <button class="icon-btn">←</button>
+            <div class="h-label">Pick your witness</div>
+            <button class="icon-btn" style="visibility:hidden;">×</button>
+          </div>
+
+          <div class="search">🔍  <span>Search 412 contacts</span></div>
+
+          <div style="max-height:200px; overflow:hidden;">
+            <div class="section-h">Selected</div>
+            <div class="contact sel">
+              <div class="av" style="background:#3F6CFF;">MC</div>
+              <div><div class="name">Mike Chen</div><div class="num">+1 (415) 555-0142</div></div>
+              <div class="check">✓</div>
+            </div>
+
+            <div class="section-h">Recent</div>
+            <div class="contact">
+              <div class="av" style="background:#22A06B;">SP</div>
+              <div><div class="name">Sarah Park</div><div class="num">+1 (415) 555-0188</div></div>
+              <div class="check"></div>
+            </div>
+            <div class="contact">
+              <div class="av" style="background:#E0457B;">AR</div>
+              <div><div class="name">Alex Rivera</div><div class="num">+1 (628) 555-0193</div></div>
+              <div class="check"></div>
+            </div>
+          </div>
+
+          <div class="col" style="gap:8px;">
+            <div class="lab" style="font-size:10px;letter-spacing:0.2em;text-transform:uppercase;font-weight:800;color:var(--muted);">Mike will get this heads-up</div>
+            <div class="bubble heads" style="font-size:13px;">Heads up — I'm using Witness to hold myself to finishing the marketing deck by Fri 8pm. If I miss, you'll get an honest confession from me. <b style="font-weight:700;">Nothing for you to do.</b></div>
+            <div class="bubble-meta">SMS · sent from your number</div>
+          </div>
+
+          <div class="grow"></div>
+          <button class="cta accent lg">Confirm Mike as witness</button>
+        </div>
+        <div class="home-ind"></div>
+      </div>
+    </div>
+    <div class="caption"><b>Witness picker</b> · Light · Heads-up preview</div>
+  </div>
+
+  <!-- WITNESS PICKER DARK -->
+  <div class="item">
+    <div class="phone dark">
+      <div class="screen">
+        <div class="statusbar"><span>9:41</span><div class="icons"><div class="sb-wifi"></div><div class="sb-bat"></div></div></div>
+        <div class="content">
+          <div class="topbar">
+            <button class="icon-btn">←</button>
+            <div class="h-label">Pick your witness</div>
+            <button class="icon-btn" style="visibility:hidden;">×</button>
+          </div>
+
+          <div class="search">🔍  <span>Search 412 contacts</span></div>
+
+          <div style="max-height:200px; overflow:hidden;">
+            <div class="section-h">Selected</div>
+            <div class="contact sel">
+              <div class="av" style="background:#3F6CFF;">MC</div>
+              <div><div class="name">Mike Chen</div><div class="num">+1 (415) 555-0142</div></div>
+              <div class="check">✓</div>
+            </div>
+
+            <div class="section-h">Recent</div>
+            <div class="contact">
+              <div class="av" style="background:#22A06B;">SP</div>
+              <div><div class="name">Sarah Park</div><div class="num">+1 (415) 555-0188</div></div>
+              <div class="check"></div>
+            </div>
+            <div class="contact">
+              <div class="av" style="background:#E0457B;">AR</div>
+              <div><div class="name">Alex Rivera</div><div class="num">+1 (628) 555-0193</div></div>
+              <div class="check"></div>
+            </div>
+          </div>
+
+          <div class="col" style="gap:8px;">
+            <div class="lab" style="font-size:10px;letter-spacing:0.2em;text-transform:uppercase;font-weight:800;color:var(--muted);">Mike will get this heads-up</div>
+            <div class="bubble heads" style="font-size:13px;">Heads up — I'm using Witness to hold myself to finishing the marketing deck by Fri 8pm. If I miss, you'll get an honest confession from me. <b style="font-weight:700;">Nothing for you to do.</b></div>
+            <div class="bubble-meta">SMS · sent from your number</div>
+          </div>
+
+          <div class="grow"></div>
+          <button class="cta accent lg">Confirm Mike as witness</button>
+        </div>
+        <div class="home-ind"></div>
+      </div>
+    </div>
+    <div class="caption"><b>Witness picker</b> · Dark · Heads-up preview</div>
+  </div>
+
+  <!-- ===================== COMMITMENT DETAIL ===================== -->
+  <div class="section-label">04 — Commitment detail</div>
+
+  <!-- DETAIL LIGHT -->
+  <div class="item">
+    <div class="phone">
+      <div class="screen">
+        <div class="statusbar"><span>9:41</span><div class="icons"><div class="sb-wifi"></div><div class="sb-bat"></div></div></div>
+        <div class="content">
+          <div class="topbar">
+            <button class="icon-btn">←</button>
+            <span class="pill on">On the line</span>
+            <button class="icon-btn">⋯</button>
+          </div>
+
+          <div class="col" style="margin-top:6px; gap:4px;">
+            <div class="h-label" style="color:var(--accent);">Countdown</div>
+            <div class="hero-cd">
+              <div class="row1">2<span style="font-size:36px;color:var(--muted);font-weight:700;margin-left:6px;margin-right:18px;">d</span>14<span style="font-size:36px;color:var(--muted);font-weight:700;margin-left:6px;">h</span></div>
+              <div class="row2">22<span style="font-size:22px;color:var(--muted);font-weight:700;">m</span> 18<span style="font-size:22px;color:var(--muted);font-weight:700;">s</span></div>
+            </div>
+          </div>
+
+          <div class="col" style="gap:4px; margin-top:6px;">
+            <div class="h-display" style="font-size:22px;">Finish marketing deck</div>
+            <div class="small">due Fri Mar 6 · 8:00 PM</div>
+          </div>
+
+          <div class="card" style="padding:14px 16px;">
+            <div class="row sb">
+              <div class="av-row">
+                <div class="av" style="background:#3F6CFF;">MC</div>
+                <div class="meta"><span class="name">Mike Chen</span><span class="sub">witness · notified</span></div>
+              </div>
+              <span style="font-size:11px;font-weight:800;color:var(--accent);letter-spacing:0.08em;">EYES ON</span>
+            </div>
+          </div>
+
+          <div class="col" style="gap:8px;">
+            <div class="h-label" style="font-size:10px;">If you miss, Mike gets</div>
+            <div class="bubble" style="font-size:13px; padding:14px 16px;">Hey Mike — I told you I'd finish the marketing deck by Friday 8pm. I didn't. No good excuse.</div>
+          </div>
+
+          <div class="grow"></div>
+          <button class="cta accent lg">✓  Mark this done</button>
+        </div>
+        <div class="home-ind"></div>
+      </div>
+    </div>
+    <div class="caption"><b>Commitment detail</b> · Light</div>
+  </div>
+
+  <!-- DETAIL DARK -->
+  <div class="item">
+    <div class="phone dark">
+      <div class="screen">
+        <div class="statusbar"><span>9:41</span><div class="icons"><div class="sb-wifi"></div><div class="sb-bat"></div></div></div>
+        <div class="content">
+          <div class="topbar">
+            <button class="icon-btn">←</button>
+            <span class="pill on">On the line</span>
+            <button class="icon-btn">⋯</button>
+          </div>
+
+          <div class="col" style="margin-top:6px; gap:4px;">
+            <div class="h-label" style="color:var(--accent);">Countdown</div>
+            <div class="hero-cd">
+              <div class="row1">2<span style="font-size:36px;color:var(--muted);font-weight:700;margin-left:6px;margin-right:18px;">d</span>14<span style="font-size:36px;color:var(--muted);font-weight:700;margin-left:6px;">h</span></div>
+              <div class="row2">22<span style="font-size:22px;color:var(--muted);font-weight:700;">m</span> 18<span style="font-size:22px;color:var(--muted);font-weight:700;">s</span></div>
+            </div>
+          </div>
+
+          <div class="col" style="gap:4px; margin-top:6px;">
+            <div class="h-display" style="font-size:22px;">Finish marketing deck</div>
+            <div class="small">due Fri Mar 6 · 8:00 PM</div>
+          </div>
+
+          <div class="card" style="padding:14px 16px;">
+            <div class="row sb">
+              <div class="av-row">
+                <div class="av" style="background:#3F6CFF;">MC</div>
+                <div class="meta"><span class="name">Mike Chen</span><span class="sub">witness · notified</span></div>
+              </div>
+              <span style="font-size:11px;font-weight:800;color:var(--accent);letter-spacing:0.08em;">EYES ON</span>
+            </div>
+          </div>
+
+          <div class="col" style="gap:8px;">
+            <div class="h-label" style="font-size:10px;">If you miss, Mike gets</div>
+            <div class="bubble" style="font-size:13px; padding:14px 16px;">Hey Mike — I told you I'd finish the marketing deck by Friday 8pm. I didn't. No good excuse.</div>
+          </div>
+
+          <div class="grow"></div>
+          <div class="proof" style="margin-bottom:6px;">
+            <div class="ico">📷</div>
+            <div class="col" style="gap:2px;">
+              <div style="font-size:13px;font-weight:700;color:var(--ink);">Add photo proof</div>
+              <div class="small">Optional. Locks in your win.</div>
+            </div>
+          </div>
+          <button class="cta accent lg">✓  Mark this done</button>
+        </div>
+        <div class="home-ind"></div>
+      </div>
+    </div>
+    <div class="caption"><b>Commitment detail</b> · Dark · with photo proof</div>
+  </div>
+
+  <!-- spacer to keep grid clean -->
+  <div></div>
+
+  <!-- ===================== CONFESSION ===================== -->
+  <div class="section-label">05 — Confession (the miss moment)</div>
+
+  <!-- CONFESSION LIGHT -->
+  <div class="item">
+    <div class="phone">
+      <div class="screen">
+        <div class="statusbar"><span>9:41</span><div class="icons"><div class="sb-wifi"></div><div class="sb-bat"></div></div></div>
+        <div class="content">
+          <div class="topbar">
+            <button class="icon-btn">×</button>
+            <span class="pill miss">Deadline blown</span>
+            <button class="icon-btn" style="visibility:hidden;">×</button>
+          </div>
+
+          <div class="confess-hero" style="margin-top:4px;">
+            <div class="miss-tag">You missed.</div>
+            <div class="miss-title">Time<br>to own it.</div>
+            <div class="miss-sub">Friday 8:00 PM came and went <b style="color:var(--ink);">47 minutes ago</b>.</div>
+          </div>
+
+          <div class="col" style="gap:10px; margin-top:8px;">
+            <div class="row g" style="gap:10px;">
+              <div class="av av-sm" style="background:#3F6CFF;">MC</div>
+              <div class="small" style="font-weight:700;color:var(--ink);">To Mike Chen · SMS</div>
+            </div>
+            <div class="bubble miss">Hey Mike — I told you I'd finish the marketing deck by Friday 8pm. I didn't. No good excuse. Sorry for the noise.</div>
+            <div class="bubble-meta">Goes from your phone, as you. We don't edit a word.</div>
+          </div>
+
+          <div class="grow"></div>
+          <button class="cta miss xl">Send the truth</button>
+          <button class="link">I'll deal with this later</button>
+        </div>
+        <div class="home-ind"></div>
+      </div>
+    </div>
+    <div class="caption"><b>Confession</b> · Light · Miss moment</div>
+  </div>
+
+  <!-- CONFESSION DARK -->
+  <div class="item">
+    <div class="phone dark">
+      <div class="screen">
+        <div class="statusbar"><span>9:41</span><div class="icons"><div class="sb-wifi"></div><div class="sb-bat"></div></div></div>
+        <div class="content">
+          <div class="topbar">
+            <button class="icon-btn">×</button>
+            <span class="pill miss">Deadline blown</span>
+            <button class="icon-btn" style="visibility:hidden;">×</button>
+          </div>
+
+          <div class="confess-hero" style="margin-top:4px;">
+            <div class="miss-tag">You missed.</div>
+            <div class="miss-title">Time<br>to own it.</div>
+            <div class="miss-sub">Friday 8:00 PM came and went <b style="color:var(--ink);">47 minutes ago</b>.</div>
+          </div>
+
+          <div class="col" style="gap:10px; margin-top:8px;">
+            <div class="row g" style="gap:10px;">
+              <div class="av av-sm" style="background:#3F6CFF;">MC</div>
+              <div class="small" style="font-weight:700;color:var(--ink);">To Mike Chen · SMS</div>
+            </div>
+            <div class="bubble miss">Hey Mike — I told you I'd finish the marketing deck by Friday 8pm. I didn't. No good excuse. Sorry for the noise.</div>
+            <div class="bubble-meta">Goes from your phone, as you. We don't edit a word.</div>
+          </div>
+
+          <div class="grow"></div>
+          <button class="cta miss xl">Send the truth</button>
+          <button class="link">I'll deal with this later</button>
+        </div>
+        <div class="home-ind"></div>
+      </div>
+    </div>
+    <div class="caption"><b>Confession</b> · Dark · Miss moment</div>
+  </div>
+
+  <div></div>
+
+  <!-- ===================== SUCCESS ===================== -->
+  <div class="section-label">06 — Success</div>
+
+  <div class="item">
+    <div class="phone">
+      <div class="screen">
+        <div class="statusbar"><span>9:41</span><div class="icons"><div class="sb-wifi"></div><div class="sb-bat"></div></div></div>
+        <div class="content">
+          <div class="topbar">
+            <button class="icon-btn">×</button>
+            <span class="pill kept">Promise kept</span>
+            <button class="icon-btn" style="visibility:hidden;">×</button>
+          </div>
+
+          <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:22px; text-align:center;">
+            <div class="win-burst">✓</div>
+            <div class="col" style="gap:6px;">
+              <div class="win-tag">Logged to record</div>
+              <div class="win-title">Promise kept.</div>
+              <div class="body" style="max-width:240px; margin:0 auto;">Finish marketing deck<br><b style="color:var(--ink);">Done with 14h to spare.</b></div>
+            </div>
+
+            <div class="record" style="width:100%;">
+              <div class="record-row">
+                <div><div class="h-label" style="font-size:10px;">Kept</div><div class="record-num kept">14</div></div>
+                <div style="text-align:right;"><div class="h-label" style="font-size:10px;">Broken</div><div class="record-num miss">3</div></div>
+              </div>
+              <div class="bar"><span style="width:82%"></span></div>
+            </div>
+          </div>
+
+          <button class="cta success xl">Send Mike the win</button>
+          <button class="link">Just close this</button>
+        </div>
+        <div class="home-ind"></div>
+      </div>
+    </div>
+    <div class="caption"><b>Success</b> · Light · Win logged</div>
+  </div>
+
+  <div class="item">
+    <div class="phone dark">
+      <div class="screen">
+        <div class="statusbar"><span>9:41</span><div class="icons"><div class="sb-wifi"></div><div class="sb-bat"></div></div></div>
+        <div class="content">
+          <div class="topbar">
+            <button class="icon-btn">×</button>
+            <span class="pill kept">Promise kept</span>
+            <button class="icon-btn" style="visibility:hidden;">×</button>
+          </div>
+
+          <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:22px; text-align:center;">
+            <div class="win-burst">✓</div>
+            <div class="col" style="gap:6px;">
+              <div class="win-tag">Logged to record</div>
+              <div class="win-title">Promise kept.</div>
+              <div class="body" style="max-width:240px; margin:0 auto;">Finish marketing deck<br><b style="color:var(--ink);">Done with 14h to spare.</b></div>
+            </div>
+
+            <div class="record" style="width:100%;">
+              <div class="record-row">
+                <div><div class="h-label" style="font-size:10px;">Kept</div><div class="record-num kept">14</div></div>
+                <div style="text-align:right;"><div class="h-label" style="font-size:10px;">Broken</div><div class="record-num miss">3</div></div>
+              </div>
+              <div class="bar"><span style="width:82%"></span></div>
+            </div>
+          </div>
+
+          <button class="cta success xl">Send Mike the win</button>
+          <button class="link">Just close this</button>
+        </div>
+        <div class="home-ind"></div>
+      </div>
+    </div>
+    <div class="caption"><b>Success</b> · Dark · Win logged</div>
+  </div>
+
+  <div></div>
+
+  <!-- ===================== RECORD ===================== -->
+  <div class="section-label">07 — Record</div>
+
+  <div class="item">
+    <div class="phone">
+      <div class="screen">
+        <div class="statusbar"><span>9:41</span><div class="icons"><div class="sb-wifi"></div><div class="sb-bat"></div></div></div>
+        <div class="content">
+          <div class="topbar">
+            <button class="icon-btn">←</button>
+            <div class="h-label">Record</div>
+            <button class="icon-btn" style="visibility:hidden;">×</button>
+          </div>
+
+          <div class="col">
+            <div class="h-label">All-time</div>
+            <div class="row sb" style="align-items:baseline;">
+              <div><div class="record-num kept" style="font-size:56px;">14</div><div class="small" style="font-weight:700;color:var(--success);">KEPT</div></div>
+              <div style="font-size:32px;font-weight:900;color:var(--muted);letter-spacing:-0.04em;">/</div>
+              <div style="text-align:right;"><div class="record-num miss" style="font-size:56px;">3</div><div class="small" style="font-weight:700;color:var(--miss);">BROKEN</div></div>
+            </div>
+            <div class="bar"><span style="width:82%"></span></div>
+          </div>
+
+          <div class="col" style="gap:6px;">
+            <div class="row sb">
+              <div class="h-label">Last 8 weeks</div>
+              <div class="small" style="font-weight:700;">+3 streak</div>
+            </div>
+            <div class="bars">
+              <div class="bcol"><div class="b k" style="height:40%"></div></div>
+              <div class="bcol"><div class="b m" style="height:25%"></div><div class="b k" style="height:35%"></div></div>
+              <div class="bcol"><div class="b k" style="height:55%"></div></div>
+              <div class="bcol"><div class="b k" style="height:30%"></div><div class="b k" style="height:35%"></div></div>
+              <div class="bcol"><div class="b m" style="height:30%"></div><div class="b k" style="height:25%"></div></div>
+              <div class="bcol"><div class="b k" style="height:70%"></div></div>
+              <div class="bcol"><div class="b k" style="height:45%"></div><div class="b k" style="height:30%"></div></div>
+              <div class="bcol"><div class="b k" style="height:55%"></div><div class="b k" style="height:30%"></div><div class="b k" style="height:15%"></div></div>
+            </div>
+            <div class="week-lab"><span>W1</span><span>W2</span><span>W3</span><span>W4</span><span>W5</span><span>W6</span><span>W7</span><span>W8</span></div>
+          </div>
+
+          <div class="seg">
+            <span class="on">All</span><span>Kept</span><span>Broken</span>
+          </div>
+
+          <div style="overflow:hidden; flex:1;">
+            <div class="hist-row"><div class="dot k"></div><div class="t">Finish marketing deck</div><div class="d">Fri</div></div>
+            <div class="hist-row"><div class="dot k"></div><div class="t">Run 20km this week</div><div class="d">Sun</div></div>
+            <div class="hist-row"><div class="dot m"></div><div class="t">Pay back Alex</div><div class="d">Wed · late</div></div>
+            <div class="hist-row"><div class="dot k"></div><div class="t">Submit Q1 review</div><div class="d">Feb 28</div></div>
+          </div>
+        </div>
+        <div class="home-ind"></div>
+      </div>
+    </div>
+    <div class="caption"><b>Record</b> · Light</div>
+  </div>
+
+  <div class="item">
+    <div class="phone dark">
+      <div class="screen">
+        <div class="statusbar"><span>9:41</span><div class="icons"><div class="sb-wifi"></div><div class="sb-bat"></div></div></div>
+        <div class="content">
+          <div class="topbar">
+            <button class="icon-btn">←</button>
+            <div class="h-label">Record</div>
+            <button class="icon-btn" style="visibility:hidden;">×</button>
+          </div>
+
+          <div class="col">
+            <div class="h-label">All-time</div>
+            <div class="row sb" style="align-items:baseline;">
+              <div><div class="record-num kept" style="font-size:56px;">14</div><div class="small" style="font-weight:700;color:var(--success);">KEPT</div></div>
+              <div style="font-size:32px;font-weight:900;color:var(--muted);letter-spacing:-0.04em;">/</div>
+              <div style="text-align:right;"><div class="record-num miss" style="font-size:56px;">3</div><div class="small" style="font-weight:700;color:var(--miss);">BROKEN</div></div>
+            </div>
+            <div class="bar"><span style="width:82%"></span></div>
+          </div>
+
+          <div class="col" style="gap:6px;">
+            <div class="row sb">
+              <div class="h-label">Last 8 weeks</div>
+              <div class="small" style="font-weight:700;">+3 streak</div>
+            </div>
+            <div class="bars">
+              <div class="bcol"><div class="b k" style="height:40%"></div></div>
+              <div class="bcol"><div class="b m" style="height:25%"></div><div class="b k" style="height:35%"></div></div>
+              <div class="bcol"><div class="b k" style="height:55%"></div></div>
+              <div class="bcol"><div class="b k" style="height:30%"></div><div class="b k" style="height:35%"></div></div>
+              <div class="bcol"><div class="b m" style="height:30%"></div><div class="b k" style="height:25%"></div></div>
+              <div class="bcol"><div class="b k" style="height:70%"></div></div>
+              <div class="bcol"><div class="b k" style="height:45%"></div><div class="b k" style="height:30%"></div></div>
+              <div class="bcol"><div class="b k" style="height:55%"></div><div class="b k" style="height:30%"></div><div class="b k" style="height:15%"></div></div>
+            </div>
+            <div class="week-lab"><span>W1</span><span>W2</span><span>W3</span><span>W4</span><span>W5</span><span>W6</span><span>W7</span><span>W8</span></div>
+          </div>
+
+          <div class="seg">
+            <span class="on">All</span><span>Kept</span><span>Broken</span>
+          </div>
+
+          <div style="overflow:hidden; flex:1;">
+            <div class="hist-row"><div class="dot k"></div><div class="t">Finish marketing deck</div><div class="d">Fri</div></div>
+            <div class="hist-row"><div class="dot k"></div><div class="t">Run 20km this week</div><div class="d">Sun</div></div>
+            <div class="hist-row"><div class="dot m"></div><div class="t">Pay back Alex</div><div class="d">Wed · late</div></div>
+            <div class="hist-row"><div class="dot k"></div><div class="t">Submit Q1 review</div><div class="d">Feb 28</div></div>
+          </div>
+        </div>
+        <div class="home-ind"></div>
+      </div>
+    </div>
+    <div class="caption"><b>Record</b> · Dark</div>
+  </div>
+
+</div>
+
+<footer>Witness — design exploration · v1 · /design/witness-screens.html</footer>
+
+</body>
+</html>

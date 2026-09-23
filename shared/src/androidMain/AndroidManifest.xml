@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <!-- Required to post the deadline notification on Android 13+. -->
+  <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+  <application>
+    <!-- Fires when AlarmManager elapses for a scheduled deadline. -->
+    <receiver
+      android:name="com.klt.pactping.notification.DeadlineAlarmReceiver"
+      android:exported="false" />
+  </application>
+
+</manifest>

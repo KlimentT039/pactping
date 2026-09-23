@@ -1,0 +1,125 @@
+<resources>
+  <!-- App identity -->
+  <string name="app_name">PactPing</string>
+
+  <!-- Common dialog buttons -->
+  <string name="dialog_ok">OK</string>
+  <string name="dialog_cancel">Cancel</string>
+
+  <!-- Countdown unit suffixes (kept short by design) -->
+  <string name="unit_days_short">d</string>
+  <string name="unit_hours_short">h</string>
+  <string name="unit_minutes_short">m</string>
+  <string name="unit_seconds_short">s</string>
+
+  <!-- Home screen -->
+  <string name="home_active_count">Active · %1$d</string>
+  <string name="home_soonest_first">Soonest first</string>
+  <string name="home_label_kept">Kept</string>
+  <string name="home_label_broken">Broken</string>
+  <string name="home_record_empty">No record yet</string>
+  <string name="home_record_percent_kept">%1$d%% of promises kept</string>
+  <string name="home_pill_on_the_line">On the line</string>
+  <string name="home_pill_due_soon">Due soon</string>
+  <string name="home_pill_overdue">Deadline blown</string>
+  <string name="home_witness_watching">%1$s watching</string>
+  <string name="home_fab_make_promise">＋  Make a promise</string>
+  <string name="home_empty_title">Nothing\non the line.</string>
+  <string name="home_empty_subtitle">Pick something you keep dodging. Name someone who\'d notice. We\'ll handle the rest.</string>
+
+  <!-- Create flow — shared chrome -->
+  <string name="create_step_indicator">Step %1$d of %2$d</string>
+  <string name="create_cta_next">Next  →</string>
+  <string name="create_cta_lock_in">Lock it in</string>
+  <string name="create_cta_go_back_edit">Go back and edit</string>
+
+  <!-- Create — Goal -->
+  <string name="create_goal_title">What\'s the\npromise?</string>
+  <string name="create_goal_placeholder">Finish marketing deck</string>
+  <string name="create_goal_helper">Be specific. Future you isn\'t allowed to weasel. \"Get fit\" doesn\'t count.</string>
+
+  <!-- Create — Deadline -->
+  <string name="create_deadline_title">When\'s the line\nin the sand?</string>
+  <string name="create_deadline_change_date">Change date</string>
+  <string name="create_deadline_change_time">Change time</string>
+  <string name="create_deadline_countdown_dh">in %1$dd %2$dh</string>
+  <string name="create_deadline_countdown_h">in %1$dh</string>
+  <string name="create_deadline_countdown_m">in %1$dm</string>
+  <string name="create_deadline_helper">Once set, it\'s locked. No extensions, no take-backs.</string>
+
+  <!-- Create — Witness -->
+  <string name="create_witness_title">Who\'s\nwatching?</string>
+  <string name="create_witness_subtitle">They get a heads-up text now and the confession later — only if you miss.</string>
+  <string name="create_witness_search">🔍   Search contacts</string>
+  <string name="create_witness_section_recent">Recent</string>
+  <string name="create_witness_pick_cta">Pick a contact</string>
+  <string name="create_witness_pick_subtitle">We\'ll only use their name and number.</string>
+  <string name="create_witness_change">Pick a different one</string>
+  <string name="create_witness_headsup_label">Heads-up they\'ll get</string>
+  <string name="create_witness_headsup_template">Heads up — I\'m using PactPing to hold myself to %1$s by %2$s. If I miss, you\'ll get an honest confession from me. Nothing for you to do.</string>
+
+  <!-- Create — Confession -->
+  <string name="create_confession_title">The\nconfession.</string>
+  <string name="create_confession_subtitle">If you miss, this goes to %1$s, verbatim. Make it honest.</string>
+  <string name="create_confession_placeholder">Hey %1$s — I told you I\'d ___ by ___. I didn\'t. No good excuse. Sorry for the noise.</string>
+  <string name="create_confession_helper">Drafted by you · editable until deadline</string>
+  <string name="create_confession_char_count">%1$d / 280</string>
+  <string name="create_confession_fallback_witness">your witness</string>
+
+  <!-- Create — Summary -->
+  <string name="create_summary_title">Here\'s\nthe deal.</string>
+  <string name="create_summary_label_goal">Goal</string>
+  <string name="create_summary_label_due">Due</string>
+  <string name="create_summary_label_witness">Witness</string>
+  <string name="create_summary_if_miss">If you miss, %1$s gets</string>
+  <string name="create_summary_no_witness">They</string>
+  <string name="create_summary_dash">—</string>
+
+  <!-- Commitment detail -->
+  <string name="detail_countdown_label">Countdown</string>
+  <string name="detail_due_prefix">due %1$s</string>
+  <string name="detail_witness_sub">witness · notified</string>
+  <string name="detail_eyes_on">Eyes on</string>
+  <string name="detail_if_miss_x_gets">If you miss, %1$s gets</string>
+  <string name="detail_mark_done">✓  Mark this done</string>
+  <string name="detail_not_found_title">This one\'s gone.</string>
+  <string name="detail_not_found_subtitle">It was either deleted or never existed.</string>
+
+  <!-- Success -->
+  <string name="success_pill_kept">Promise kept</string>
+  <string name="success_logged">Logged to record</string>
+  <string name="success_title">Promise kept.</string>
+  <string name="success_done_with_spare_days">Done with %1$dd to spare.</string>
+  <string name="success_done_with_spare_hours">Done with %1$dh to spare.</string>
+  <string name="success_done_with_spare_minutes">Done with %1$dm to spare.</string>
+  <string name="success_done_in_time">Done just in time.</string>
+  <string name="success_send_brag">Send %1$s the win</string>
+  <string name="success_just_close">Just close this</string>
+  <string name="success_brag_template">Hey %1$s — I told you I\'d %2$s. Done. You can stop watching.</string>
+
+  <!-- Confession (miss moment) -->
+  <string name="confession_pill_blown">Deadline blown</string>
+  <string name="confession_eyebrow">You missed.</string>
+  <string name="confession_title">Time\nto own it.</string>
+  <string name="confession_subtitle">%1$s came and went %2$s ago.</string>
+  <string name="confession_to_label">To %1$s · SMS</string>
+  <string name="confession_meta">Goes from your phone, as you. We don\'t edit a word.</string>
+  <string name="confession_cta_send">Send the truth</string>
+  <string name="confession_link_later">I\'ll deal with this later</string>
+  <string name="confession_elapsed_days">%1$d days</string>
+  <string name="confession_elapsed_hours">%1$d hours</string>
+  <string name="confession_elapsed_minutes">%1$d minutes</string>
+
+  <!-- Record -->
+  <string name="record_title">Record</string>
+  <string name="record_alltime">All-time</string>
+  <string name="record_8weeks">Last 8 weeks</string>
+  <string name="record_streak">+%1$d streak</string>
+  <string name="record_week_short">W%1$d</string>
+  <string name="record_filter_all">All</string>
+  <string name="record_filter_kept">Kept</string>
+  <string name="record_filter_broken">Broken</string>
+  <string name="record_history_late">%1$s · late</string>
+  <string name="record_empty_title">No history yet.</string>
+  <string name="record_empty_subtitle">When you start hitting (or missing) deadlines, they\'ll land here.</string>
+</resources>
