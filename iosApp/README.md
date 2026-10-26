@@ -21,7 +21,7 @@ iosApp/
 │   ├── ContactPicker.swift       # UIViewControllerRepresentable for CNContactPickerViewController
 │   ├── MessageComposer.swift     # UIViewControllerRepresentable for MFMessageComposeViewController
 │   ├── InteropExtensions.swift   # Date <-> Kotlinx_datetimeInstant bridging + deadline / heads-up text helpers
-│   ├── WitnessTheme.swift        # Color + font tokens mirroring the Compose theme
+│   ├── PactPingTheme.swift       # Color + font tokens mirroring the Compose theme
 │   └── Info.plist                # Minimal Info.plist
 └── README.md                     # this file
 ```
@@ -37,14 +37,14 @@ version.
 From the repo root:
 
 ```bash
-./gradlew :shared:assembleWitnessSharedXCFramework
+./gradlew :shared:assemblePactPingSharedXCFramework
 ```
 
 That writes the framework to:
 
 ```
-shared/build/XCFrameworks/release/WitnessShared.xcframework
-shared/build/XCFrameworks/debug/WitnessShared.xcframework
+shared/build/XCFrameworks/release/PactPingShared.xcframework
+shared/build/XCFrameworks/debug/PactPingShared.xcframework
 ```
 
 Use the **debug** one while you're iterating (faster builds, better symbols);
@@ -81,7 +81,7 @@ In Xcode's Project Navigator, drag in every `.swift` file from
   `ConfessionView.swift`, `RecordView.swift`,
   `CreateView.swift`, `CreateViewModel.swift`
 - `ContactPicker.swift`, `MessageComposer.swift`,
-  `InteropExtensions.swift`, `WitnessTheme.swift`
+  `InteropExtensions.swift`, `PactPingTheme.swift`
 - `Info.plist` (in target settings → General → "Custom iOS Target
   Properties" or set `INFOPLIST_FILE` to point at the file)
 
@@ -94,7 +94,7 @@ the repo) and add to the `iosApp` target.
 2. Scroll to **Frameworks, Libraries, and Embedded Content**.
 3. Click `+` → **Add Other** → **Add Files…**
 4. Browse to
-   `shared/build/XCFrameworks/debug/WitnessShared.xcframework` and add it.
+   `shared/build/XCFrameworks/debug/PactPingShared.xcframework` and add it.
 5. In the same panel, set the framework's **Embed** column to
    **Embed & Sign**.
 
@@ -122,7 +122,7 @@ the SQLite DB starts empty on first launch — exactly like Android.
 ## What works in this shell
 
 - **App container** (`IosAppContainer` in shared) wires SQLDelight driver
-  → `WitnessDatabase` → `CommitmentRepository` + `HomeStore` +
+  → `PactPingDatabase` → `CommitmentRepository` + `HomeStore` +
   `CreateCommitmentStore`.
 - **Home screen** in SwiftUI subscribes to the shared `HomeStore.state` via
   `IosFlowWatchers.shared.home(store:)` → `FlowWatcher<HomeUiState>` →
@@ -159,7 +159,7 @@ the SQLite DB starts empty on first launch — exactly like Android.
 Whenever you change Kotlin code in `:shared`, re-run:
 
 ```bash
-./gradlew :shared:assembleWitnessSharedXCFramework
+./gradlew :shared:assemblePactPingSharedXCFramework
 ```
 
 Xcode will pick up the rebuilt framework on the next build (Cmd-B / Cmd-R).
